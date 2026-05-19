@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>企划品效数据中心</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --or1:#E8600A;--or2:#F47C2F;--or3:#FFF0E6;--or4:#FFDAB8;--or5:#FFF7F0;
+  --bl1:#1260CC;--bl2:#2F7DE8;
+  --gn1:#16A070;
+  --yw1:#C47D00;
+  --bg:#F2F3F7;--card:#FFFFFF;--border:#E4E6F0;
+  --txt:#1A1A2E;--txt2:#444460;--txt3:#9999B0;
+  --r:8px;
+}
+html,body{
+  width:1920px;height:953px;
+  font-size:12px;font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--bg);color:var(--txt);overflow:hidden}
+
+/* ===== HEADER ===== */
+.hd{width:1920px;height:50px;background:linear-gradient(135deg,#C04800 0%,var(--or1) 40%,var(--or2) 100%);
+  display:flex;align-items:center;justify-content:space-between;padding:0 22px;flex-shrink:0;
+  box-shadow:0 2px 12px rgba(232,96,10,0.28);z-index:100}
+.hd-left{display:flex;align-items:center;gap:10px}
+.hd-icon{width:28px;height:28px;background:rgba(255,255,255,0.18);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;font-size:15px}
+.hd h1{color:#fff;font-size:16px;font-weight:800;letter-spacing:.8px}
+.hd-right{display:flex;align-items:center;gap:10px}
+.hd-time{color:rgba(255,255,255,0.8);font-size:11px}
+.yr-sel{background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.38);
+  color:#fff;font-size:12px;font-weight:700;padding:4px 9px;border-radius:5px;
+  cursor:pointer;outline:none;font-family:inherit}
+.yr-sel option{background:var(--or1);color:#fff}
+.btn-export{background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.45);
+  color:#fff;font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;
+  cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:5px}
+.btn-export:hover{background:rgba(255,255,255,0.26)}
+
+/* ===== MAIN LAYOUT ===== */
+.main{width:1920px;height:calc(953px - 50px);display:grid;
+  grid-template-columns:700px 700px 480px;gap:8px;padding:8px}
+
+/* ===== CARD ===== */
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);
+  box-shadow:0 1px 5px rgba(0,0,0,0.05);overflow:hidden;display:flex;flex-direction:column}
+.card-hd{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;border-bottom:1px solid var(--border);
+  background:linear-gradient(90deg,var(--or5) 0%,#fff 50%);min-height:38px}
+.card-hd-left{display:flex;align-items:center;gap:7px;flex:1;min-width:0}
+.card-hd-title{font-size:12px;font-weight:700;color:var(--or1);white-space:nowrap;
+  display:flex;align-items:center;gap:7px}
+.card-hd-title::before{content:'';width:3px;height:13px;background:var(--or1);border-radius:2px;flex-shrink:0}
+.card-badge{background:var(--or3);color:var(--or1);font-size:10px;font-weight:600;
+  padding:2px 7px;border-radius:10px;white-space:nowrap}
+.card-hd-right{display:flex;align-items:center;gap:6px}
+
+/* 取数说明按钮 */
+.qsm-btn{font-size:10px;color:var(--txt3);cursor:pointer;white-space:nowrap;
+  text-decoration:underline dotted;padding:2px 4px;border-radius:3px;
+  border:1px solid transparent;transition:all .15s}
+.qsm-btn:hover{color:var(--or1);background:var(--or3);border-color:var(--or4)}
+.qsm-num{background:var(--or3);color:var(--or1);font-size:9px;font-weight:700;
+  padding:1px 4px;border-radius:8px;margin-right:2px}
+
+/* ===== LEFT ===== */
+.left-col{display:flex;flex-direction:column;gap:8px;overflow:hidden}
+
+/* ===== CENTER ===== */
+.center-col{display:flex;flex-direction:column;gap:8px;overflow:hidden}
+
+/* KPI */
+.kpi-card{flex-shrink:0}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:8px}
+.kpi-item{border-radius:7px;padding:10px 12px;position:relative;cursor:pointer;transition:all .18s;
+  min-height:68px;display:flex;flex-direction:column;justify-content:flex-end}
+.kpi-item:hover{filter:brightness(0.96);transform:translateY(-1px)}
+.kpi-or{background:linear-gradient(135deg,var(--or1),var(--or2));color:#fff}
+.kpi-bl{background:linear-gradient(135deg,var(--bl1),var(--bl2));color:#fff}
+.kpi-gn{background:linear-gradient(135deg,#0D9060,var(--gn1));color:#fff}
+.kpi-yw{background:linear-gradient(135deg,#B07000,var(--yw1));color:#fff}
+.kpi-label{font-size:10px;opacity:.88;margin-bottom:4px;line-height:1.3;font-weight:500}
+.kpi-val{font-size:22px;font-weight:800;line-height:1;letter-spacing:-0.4px}
+.kpi-hint{position:absolute;top:6px;right:8px;font-size:9px;opacity:.6;
+  color:#fff;text-decoration:underline dotted;cursor:pointer}
+
+/* ===== RIGHT ===== */
+.right-col{display:flex;flex-direction:column;gap:8px;overflow:hidden}
+
+/* ===== TABLE ===== */
+.tbl-scroll{flex:1;overflow:auto;min-height:0;position:relative}
+.tbl-scroll::-webkit-scrollbar{width:4px;height:4px}
+.tbl-scroll::-webkit-scrollbar-thumb{background:var(--or4);border-radius:3px}
+.tbl-scroll::-webkit-scrollbar-corner{background:#fff}
+.dtbl{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+.dtbl thead{position:sticky;top:0;z-index:5}
+.dtbl thead th{
+  background:linear-gradient(135deg,var(--or1),var(--or2));
+  color:#fff;padding:6px 4px;text-align:center;font-weight:600;white-space:pre-line;
+  word-break:break-all;font-size:10px;line-height:1.4;vertical-align:middle;
+  border-right:1px solid rgba(255,255,255,0.15);min-width:52px}
+.dtbl thead th:last-child{border-right:none}
+.dtbl thead th:first-child{
+  text-align:left;padding-left:10px;min-width:88px;position:sticky;left:0;z-index:6;
+  background:linear-gradient(135deg,var(--or1),var(--or2))}
+.dtbl tbody tr{border-bottom:1px solid #F0F0F8;transition:background .12s}
+.dtbl tbody tr:hover td{background:var(--or3)}
+.dtbl tbody tr:hover td:first-child{background:var(--or4);color:var(--or1)}
+.dtbl tbody td{
+  padding:6px 4px;text-align:center;color:var(--txt2);font-size:11px;white-space:nowrap;
+  border-right:1px solid #F5F5F8;transition:background .12s}
+.dtbl tbody td:last-child{border-right:none}
+.dtbl tbody td:first-child{
+  text-align:left;padding-left:10px;font-weight:600;color:var(--or1);min-width:88px;max-width:88px;
+  position:sticky;left:0;background:inherit;z-index:1;transition:background .12s;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dtbl tfoot td{
+  background:var(--or5);color:var(--or1);font-weight:700;
+  padding:7px 4px;text-align:center;font-size:11px;border-top:2px solid var(--or4);
+  position:sticky;bottom:0}
+.dtbl tfoot td:first-child{
+  text-align:left;padding-left:10px;position:sticky;left:0;z-index:5;min-width:88px;max-width:88px}
+
+/* ===== MONTH BAR ===== */
+.month-bar{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:7px 12px;
+  border-bottom:1px solid var(--border);background:linear-gradient(90deg,var(--or5),#fff 55%)}
+.month-bar label{font-size:11px;color:var(--or1);font-weight:600;white-space:nowrap}
+.mo-sel{background:var(--or3);border:1px solid var(--or4);color:var(--or1);
+  font-size:12px;font-weight:700;padding:3px 8px;border-radius:5px;
+  cursor:pointer;outline:none;font-family:inherit}
+.mo-sel option{background:#fff;color:var(--txt)}
+.month-tip{font-size:10px;color:var(--txt3);margin-left:auto}
+
+/* ===== STAT CARD ===== */
+.stat-card{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.stat-body{flex:1;overflow-y:auto;padding:5px 12px 8px;min-height:0}
+.stat-body::-webkit-scrollbar{width:4px}
+.stat-body::-webkit-scrollbar-thumb{background:var(--or4);border-radius:3px}
+.stat-meta{display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.stat-meta-label{font-size:10px;color:var(--txt3)}
+.stat-meta-val{font-size:11px;font-weight:800;color:var(--or1)}
+.bar-row{display:flex;align-items:center;gap:7px;margin-bottom:6px;
+  padding:2px 4px;border-radius:4px;transition:background .12s;cursor:default}
+.bar-row:hover{background:var(--or5)}
+.bar-row-name{width:80px;font-size:10px;color:var(--txt2);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;flex-shrink:0;font-weight:500}
+.bar-track{flex:1;height:9px;background:#EEF0F8;border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;
+  background:linear-gradient(90deg,var(--or1),var(--or2));transition:width .6s ease,filter .12s}
+.bar-fill.bl{background:linear-gradient(90deg,var(--bl1),var(--bl2))}
+.bar-fill.gn{background:linear-gradient(90deg,#0E9060,var(--gn1))}
+.bar-fill.yw{background:linear-gradient(90deg,#B07000,var(--yw1))}
+.bar-row:hover .bar-fill{filter:brightness(1.1)}
+.bar-val{width:44px;font-size:10px;color:var(--or1);font-weight:700;text-align:right;flex-shrink:0}
+.bar-val.bl{color:var(--bl1)}
+.bar-val.gn{color:var(--gn1)}
+.bar-val.yw{color:var(--yw1)}
+
+/* 渠道筛选栏 */
+.ch-filter{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:6px 12px;
+  border-bottom:1px solid var(--border);background:linear-gradient(90deg,var(--or5),#fff 55%)}
+.ch-filter label{font-size:11px;color:var(--or1);font-weight:600;white-space:nowrap}
+.ch-sel{background:var(--or3);border:1px solid var(--or4);color:var(--or1);
+  font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;
+  cursor:pointer;outline:none;font-family:inherit;min-width:120px}
+.ch-sel option{background:#fff;color:var(--txt)}
+
+/* ===== TOOLTIP ===== */
+.tooltip{position:fixed;z-index:9999;pointer-events:none;
+  background:#fff;border:1px solid var(--or4);border-radius:8px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.15);padding:10px 13px;min-width:200px;max-width:280px;
+  display:none;animation:ttIn .12s ease}
+.tooltip.on{display:block}
+@keyframes ttIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.tooltip-title{font-size:12px;font-weight:700;color:var(--or1);margin-bottom:8px;
+  padding-bottom:6px;border-bottom:1px solid var(--border)}
+.tooltip-row{display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin-bottom:4px;font-size:11px}
+.tooltip-row:last-child{margin-bottom:0}
+.tooltip-key{color:var(--txt2);white-space:nowrap}
+.tooltip-val{font-weight:700;color:var(--txt);white-space:nowrap}
+
+/* ===== POPOVER ===== */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:500;
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.overlay.on{display:flex}
+.pop{background:#fff;border-radius:12px;width:580px;max-width:92vw;max-height:82vh;
+  display:flex;flex-direction:column;box-shadow:0 8px 36px rgba(0,0,0,0.16);
+  animation:popIn .2s ease}
+@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.pop-hd{display:flex;align-items:center;justify-content:space-between;
+  padding:13px 20px;border-bottom:1px solid var(--border);
+  background:linear-gradient(90deg,var(--or5),#fff)}
+.pop-hd h3{font-size:13px;font-weight:700;color:var(--or1);display:flex;align-items:center;gap:7px}
+.pop-hd h3::before{content:'';width:3px;height:16px;background:var(--or1);border-radius:2px;flex-shrink:0}
+.pop-x{width:28px;height:28px;background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;cursor:pointer;font-size:15px;color:var(--txt2);
+  display:flex;align-items:center;justify-content:center;transition:all .18s}
+.pop-x:hover{background:var(--or3);color:var(--or1);border-color:var(--or2)}
+.pop-body{padding:14px 20px;overflow-y:auto;flex:1}
+.pop-item{display:flex;align-items:baseline;gap:8px;margin-bottom:7px;padding:6px 8px;
+  border-radius:5px;transition:background .12s}
+.pop-item:hover{background:var(--or5)}
+.pop-num{font-size:10px;font-weight:700;color:var(--or1);
+  background:var(--or3);padding:1px 6px;border-radius:8px;flex-shrink:0;min-width:22px;text-align:center}
+.pop-label{font-size:11px;color:var(--txt2);margin-bottom:2px;font-weight:600}
+.pop-desc{font-size:11px;color:var(--txt);line-height:1.5}
+.pop-ft{display:flex;align-items:center;justify-content:space-between;
+  padding:9px 20px;border-top:1px solid var(--border);background:#F8F9FB}
+.btn{padding:6px 14px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;
+  border:none;font-family:inherit;display:inline-flex;align-items:center;gap:4px;transition:all .18s}
+.btn-pr{background:var(--or1);color:#fff}
+.btn-pr:hover{background:var(--or2)}
+.btn-sc{background:#fff;color:var(--txt2);border:1px solid var(--border)}
+.btn-sc:hover{border-color:var(--or1);color:var(--or1)}
+.btn-gh{background:transparent;color:var(--txt3);border:1px solid transparent;font-size:10px;padding:4px 9px}
+.btn-gh:hover{color:var(--or1);background:var(--or3)}
+
+/* ===== 排序表头 ===== */
+.dtbl thead th.sortable{cursor:pointer;user-select:none;position:relative;transition:background .12s}
+.dtbl thead th.sortable:hover{background:linear-gradient(135deg,#c04800,var(--or1)) !important;filter:brightness(1.12)}
+.dtbl thead th .sort-icon{display:inline-block;margin-left:3px;opacity:.55;font-size:9px;vertical-align:middle;line-height:1}
+.dtbl thead th.sort-asc .sort-icon{opacity:1;color:#ffe0b0}
+.dtbl thead th.sort-desc .sort-icon{opacity:1;color:#ffe0b0}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:18px;right:18px;background:var(--txt);color:#fff;
+  padding:8px 15px;border-radius:7px;font-size:11px;font-weight:500;z-index:999;
+  display:none;align-items:center;gap:5px;box-shadow:0 4px 16px rgba(0,0,0,0.18)}
+.toast.on{display:flex;animation:slideR .2s ease}
+.toast.ok{background:var(--gn1);color:#0a6040}
+@keyframes slideR{from{transform:translateX(12px);opacity:0}to{transform:translateX(0);opacity:1}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hd">
+  <div class="hd-left">
+    <div class="hd-icon">📊</div>
+    <h1>企划品效数据中心</h1>
+  </div>
+  <div class="hd-right">
+    <span class="hd-time" id="hdTime"></span>
+    <select class="yr-sel" id="yrSel">
+      <option value="2024">2024年</option>
+      <option value="2025" selected>2025年</option>
+      <option value="2026">2026年</option>
+    </select>
+    <button class="btn-export" onclick="exportAll()">⬇ 导出取数说明</button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LEFT: 年度执行明细 -->
+  <div class="left-col">
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-hd-left">
+          <div class="card-hd-title">年度执行明细（万元）</div>
+          <span class="card-badge">40家</span>
+        </div>
+        <div class="card-hd-right">
+          <span class="qsm-btn" onclick="openQSM('annual')"><span class="qsm-num">11</span>取数说明</span>
+        </div>
+      </div>
+      <div class="tbl-scroll">
+        <table class="dtbl" id="annualTbl"><thead></thead><tbody></tbody><tfoot></tfoot></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER: KPI + 月度明细 -->
+  <div class="center-col">
+
+    <div class="card kpi-card">
+      <div class="card-hd">
+        <div class="card-hd-left">
+          <div class="card-hd-title">年度执行总况</div>
+          <span class="card-badge">汇总</span>
+        </div>
+        <div class="card-hd-right">
+          <span class="qsm-btn" onclick="openQSM('kpi')"><span class="qsm-num">9</span>取数说明</span>
+        </div>
+      </div>
+      <div class="kpi-grid" id="kpiGrid"></div>
+    </div>
+
+    <div class="card" style="flex:1;min-height:0;display:flex;flex-direction:column">
+      <div class="card-hd">
+        <div class="card-hd-left">
+          <div class="card-hd-title">月度执行明细（万元）</div>
+          <span class="card-badge">40家</span>
+        </div>
+        <div class="card-hd-right">
+          <span class="qsm-btn" onclick="openQSM('monthly')"><span class="qsm-num">11</span>取数说明</span>
+        </div>
+      </div>
+      <div class="month-bar">
+        <label>选择月份：</label>
+        <select class="mo-sel" id="moSel">
+          <option value="">全部</option>
+          <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+          <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+          <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+          <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+        </select>
+        <span class="month-tip">仅对该板块数据有效</span>
+      </div>
+      <div class="tbl-scroll">
+        <table class="dtbl" id="monthlyTbl"><thead></thead><tbody></tbody><tfoot></tfoot></table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: 4个统计表 -->
+  <div class="right-col">
+
+    <div class="card stat-card">
+      <div class="card-hd">
+        <div class="card-hd-left"><div class="card-hd-title">年度企划宣传费预算执行率</div></div>
+        <div class="card-hd-right">
+          <span class="qsm-btn" onclick="openQSM('chartExecRate')"><span class="qsm-num">1</span>取数说明</span>
+        </div>
+      </div>
+      <div class="stat-body" id="barExecRate"></div>
+    </div>
+
+    <div class="card stat-card">
+      <div class="card-hd">
+        <div class="card-hd-left"><div class="card-hd-title">年度签约目标完成率</div></div>
+        <div class="card-hd-right">
+          <span class="qsm-btn" onclick="openQSM('chartSignRate')"><span class="qsm-num">1</span>取数说明</span>
+        </div>
+      </div>
+      <div class="stat-body" id="barSignRate"></div>
+    </div>
+
+    <div class="card stat-card">
+      <div class="card-hd">
+        <div class="card-hd-left"><div class="card-hd-title">年度签约营销费效比</div></div>
+        <div class="card-hd-right">
+          <span class="qsm-btn" onclick="openQSM('chartCostRatio')"><span class="qsm-num">1</span>取数说明</span>
+        </div>
+      </div>
+      <div class="stat-body" id="barCostRatio"></div>
+    </div>
+
+    <div class="card stat-card">
+      <div class="card-hd">
+        <div class="card-hd-left"><div class="card-hd-title">年度企划宣传渠道费效比</div></div>
+        <div class="card-hd-right">
+          <select class="ch-sel" id="chSel" style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;border:1px solid var(--or4);background:var(--or3);color:var(--or1);cursor:pointer;outline:none;min-width:110px">
+            <option value="all">全部</option>
+            <option value="convTrad">传统媒体广告</option>
+            <option value="convNew">新媒体广告</option>
+            <option value="convVert">垂类媒体广告</option>
+            <option value="convOut">户外广告</option>
+            <option value="convPost">邮电广告</option>
+            <option value="convMat">宣传物料</option>
+            <option value="convEvt">活动营销</option>
+          </select>
+          <span class="qsm-btn" onclick="openQSM('chartConvRate')"><span class="qsm-num">1</span>取数说明</span>
+        </div>
+      </div>
+      <div class="stat-body" id="barConvRate"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- TOOLTIP -->
+<div class="tooltip" id="tooltip"></div>
+
+<!-- POPOVER -->
+<div class="overlay" id="overlay" onclick="closePopOnBg(event)">
+  <div class="pop">
+    <div class="pop-hd">
+      <h3 id="popTitle">取数说明</h3>
+      <button class="pop-x" onclick="closePop()">×</button>
+    </div>
+    <div class="pop-body" id="popBody"></div>
+    <div class="pop-ft">
+      <div style="display:flex;gap:5px">
+        <button class="btn btn-gh" onclick="exportPop()">⬇ 导出</button>
+      </div>
+      <div style="display:flex;gap:5px">
+        <button class="btn btn-sc" onclick="closePop()">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span>✓</span><span id="toastMsg"></span></div>
+
+<script>
+/* =============================================
+   取数说明（合并结构）
+============================================= */
+const FMLS={
+  kpi:{
+    title:'年度执行总况 · 取数说明（共9项）',
+    fields:[
+      {k:'kpi_annualSign',   label:'年度签约额预算（万元）', desc:'各公司年度签约额预算总计。取各公司经营周报预算汇总功能中【新增签约金额-年度预算数】合计。'},
+      {k:'kpi_annualPromo',  label:'年度企划宣传费预算（万元）', desc:'各公司总计。获取数仓中，预算表内【企划宣传费】所有类别的对应年度预算额总和。'},
+      {k:'kpi_targetRatio',   label:'年度计划企划宣传签约费效比', desc:'年度签约额预算 / 年度企划宣传费预算。'},
+      {k:'kpi_lastMonthSign', label:'截止上月签约额（万元）', desc:'各公司总计。获取经营周报汇总功能下，在最新周期周报上【新增签约金额-截止上月完成情况系统取值】的汇总。'},
+      {k:'kpi_lastMonthPromo',label:'截止上月企划宣传费支出额', desc:'各公司总计。获取数仓中，支出明细表内【企划宣传费】所有类别的本年内截止上个月底的费用报销单金额之和。'},
+      {k:'kpi_costRatio',     label:'截止上月企划宣传签约费效比', desc:'截止上月企划宣传费支出 / 截止上月签约总额。'},
+      {k:'kpi_convRate',      label:'截止上月企划宣传渠道费效比', desc:'截止上月企划宣传费支出 / 截止上月渠道转化客户数量。'},
+      {k:'kpi_signCompRate', label:'年度签约额目标完成率', desc:'截止上月签约额 / 年度签约额预算。'},
+      {k:'kpi_promoExecRate',label:'年度企划宣传费执行率', desc:'截止上月企划宣传费支出 / 年度企划宣传费预算。'},
+    ]
+  },
+  annual:{
+    title:'年度执行明细 · 取数说明（共11项）',
+    fields:[
+      {k:'a_annualBudgetPromo',label:'年度宣传费预算（万元）', desc:'获取数仓中，预算表内【企划宣传费】所有类别的对应年度预算额总和。'},
+      {k:'a_lastPromo',        label:'截止上月宣传费支出额（万元）', desc:'获取数仓中，支出明细表内【企划宣传费】所有类别的本年内截止上个月底的费用报销单金额之和。'},
+      {k:'a_promoExecRate',    label:'宣传费执行率', desc:'截止上月宣传费支出额 / 年度宣传费预算。'},
+      {k:'a_convTrad',        label:'传统媒体广告转化率', desc:'截止上月宣传费-传统媒体广告支出 / 截止上月渠道-传统媒体广告转化客户数量。'},
+      {k:'a_convNew',         label:'新媒体广告转化率', desc:'截止上月宣传费-新媒体广告支出 / 截止上月渠道-新媒体广告转化客户数量。'},
+      {k:'a_convVert',        label:'垂类媒体广告转化率', desc:'截止上月宣传费-垂类媒体广告支出 / 截止上月渠道-垂类媒体广告转化客户数量。'},
+      {k:'a_convOut',         label:'户外广告转化率', desc:'截止上月宣传费-户外广告支出 / 截止上月渠道-户外广告转化客户数量。'},
+      {k:'a_convPost',        label:'邮电广告转化率', desc:'截止上月宣传费-邮电广告支出 / 截止上月渠道-邮电广告转化客户数量。'},
+      {k:'a_convMat',         label:'宣传物料转化率', desc:'截止上月宣传费-宣传物料支出 / 截止上月渠道-宣传物料转化客户数量。'},
+      {k:'a_convEvt',         label:'活动营销转化率', desc:'截止上月宣传费-活动营销支出 / 截止上月渠道-活动营销转化客户数量。'},
+    ]
+  },
+  monthly:{
+    title:'月度执行明细 · 取数说明（共11项）',
+    fields:[
+      {k:'m_budgetPromo',  label:'本月宣传费预算（万元）', desc:'获取数仓中，预算表内【企划宣传费】所有类别的对应系统所选月份的预算额总和。'},
+      {k:'m_promo',         label:'本月宣传费支出额（万元）', desc:'获取数仓中，支出明细表内【企划宣传费】所有类别的本年内截止上个月底的费用报销单金额之和。'},
+      {k:'m_promoExecRate',label:'宣传费执行率', desc:'本月宣传费支出额 / 本月宣传费预算。'},
+      {k:'m_convTrad',      label:'传统媒体广告转化率', desc:'本月宣传费-传统媒体广告支出 / 本月渠道-传统媒体广告转化客户数量。'},
+      {k:'m_convNew',       label:'新媒体广告转化率', desc:'本月宣传费-新媒体广告支出 / 本月渠道-新媒体广告转化客户数量。'},
+      {k:'m_convVert',      label:'垂类媒体广告转化率', desc:'本月宣传费-垂类媒体广告支出 / 本月渠道-垂类媒体广告转化客户数量。'},
+      {k:'m_convOut',       label:'户外广告转化率', desc:'本月宣传费-户外广告支出 / 本月渠道-户外广告转化客户数量。'},
+      {k:'m_convPost',      label:'邮电广告转化率', desc:'本月宣传费-邮电广告支出 / 本月渠道-邮电广告转化客户数量。'},
+      {k:'m_convMat',       label:'宣传物料转化率', desc:'本月宣传费-宣传物料支出 / 本月渠道-宣传物料转化客户数量。'},
+      {k:'m_convEvt',       label:'活动营销转化率', desc:'本月宣传费-活动营销支出 / 本月渠道-活动营销转化客户数量。'},
+    ]
+  },
+  chartExecRate:{title:'年度企划宣传费预算执行率 · 取数说明',fields:[
+    {k:'chartExecRate',label:'年度企划宣传费预算执行率',desc:'横坐标公司名称；纵坐标执行率；计算公式：截止上月宣传费支出额 / 年度宣传费预算。'}
+  ]},
+  chartSignRate:{title:'年度签约目标完成率 · 取数说明',fields:[
+    {k:'chartSignRate',label:'年度签约目标完成率',desc:'横坐标公司名称；纵坐标完成率；计算公式：截止上月签约总额 / 年度预算签约额。'}
+  ]},
+  chartCostRatio:{title:'年度签约营销费效比 · 取数说明',fields:[
+    {k:'chartCostRatio',label:'年度签约营销费效比',desc:'横坐标公司名称；纵坐标费效比；计算公式：截止上月宣传费支出额 / 截止上月签约总额。'}
+  ]},
+  chartConvRate:{title:'年度企划宣传渠道费效比 · 取数说明',fields:[
+    {k:'chartConvRate',label:'年度企划宣传渠道费效比',desc:'横坐标公司名称；纵坐标费效比；截止上月宣传费支出额 / 截止上月渠道客户数量。'}
+  ]},
+};
+
+/* =============================================
+   40家公司固定演示数据
+============================================= */
+const COMPANIES=[
+  '烟台公司','研创三期','产业运营中心','南通公司','洪泽运营公司',
+  '成都芯谷公司','长沙公司','新洲公司','重庆沙坪坝公司','绵阳公司',
+  '鄂州公司','沈阳公司','咸阳生物城公司','邯郸公司','佛山公司',
+  '蔡甸公司','青岛公司','保定公司','洛阳公司','泸州公司',
+  '宜昌公司','合肥公司','黄石公司','温州公司','淮安开发公司',
+  '武汉公司','郴州公司','天津公司','重庆北碚公司','上海公司',
+  '黄冈公司','西安公司','哈尔滨公司','霸州公司','莆田公司',
+  '延安公司','长沙星沙公司','重庆运营公司','贵安公司','咸阳西部智谷公司'
+];
+function seededRnd(seed){let x=Math.sin(seed)*10000;return x-Math.floor(x);}
+function sr(seed,min,max,dec){return parseFloat((seededRnd(seed)*(max-min)+min).toFixed(dec||2));}
+const CD={};
+COMPANIES.forEach((c,i)=>{
+  const seed=i*17+1;
+  const annSign=sr(seed,800,5000),annPromo=sr(seed+1,50,400);
+  const lastSign=sr(seed+2,annSign*0.35,annSign*0.92),lastPromo=sr(seed+3,annPromo*0.25,annPromo*0.88);
+  CD[c]={
+    annSign,annPromo,lastSign,lastPromo,
+    targetRatio:parseFloat((annSign/annPromo).toFixed(2)),
+    costRatio:parseFloat((lastSign/lastPromo).toFixed(2))+(seededRnd(seed+0.5)*2-1)*0.8,
+    convRate:sr(seed+4,0.8,4.5),signCompRate:parseFloat((lastSign/annSign*100).toFixed(1)),
+    promoExecRate:parseFloat((lastPromo/annPromo*100).toFixed(1)),
+    convTrad:sr(seed+5,0.6,3.8),convNew:sr(seed+6,0.8,5.0),convVert:sr(seed+7,0.5,3.5),
+    convOut:sr(seed+8,0.4,3.0),convPost:sr(seed+9,0.3,2.5),convMat:sr(seed+10,0.5,3.2),convEvt:sr(seed+11,1.0,6.0),
+    mSign:sr(seed+12,annSign*0.04,annSign*0.12),mSignBud:sr(seed+13,annSign*0.06,annSign*0.14),
+    mPromo:sr(seed+14,annPromo*0.04,annPromo*0.12),mPromoBud:sr(seed+15,annPromo*0.06,annPromo*0.14),
+    mCostRatio:sr(seed+16,5,18),mConvRate:sr(seed+17,0.5,4.0),
+    mExecRate:parseFloat((sr(seed+18,0.15,1.1,3)*100).toFixed(1)),
+    mConvTrad:sr(seed+19,0.4,3.2),mConvNew:sr(seed+20,0.6,4.5),mConvVert:sr(seed+21,0.4,3.0),
+    mConvOut:sr(seed+22,0.3,2.8),mConvPost:sr(seed+23,0.2,2.2),mConvMat:sr(seed+24,0.4,3.0),mConvEvt:sr(seed+25,0.8,5.5),
+  };
+});
+const totl=k=>COMPANIES.reduce((s,c)=>s+(CD[c][k]||0),0);
+const avg =k=>totl(k)/COMPANIES.length;
+const pct =v=>v.toFixed(1)+'%';
+const wan =v=>v.toLocaleString('zh-CN',{maximumFractionDigits:0})+'万';
+const num =(v,d=2)=>v.toLocaleString('zh-CN',{maximumFractionDigits:d});
+
+/* =============================================
+   KPI
+============================================= */
+const KPI_DEFS=[
+  {k:'kpi_annualSign',   label:'年度签约额\n预算（万元）',   fn:()=>wan(totl('annSign')),     cls:'kpi-or'},
+  {k:'kpi_annualPromo',  label:'年度宣传费\n预算（万元）',    fn:()=>wan(totl('annPromo')),    cls:'kpi-bl'},
+  {k:'kpi_targetRatio',   label:'年度计划\n签约费效比',         fn:()=>num(avg('targetRatio')), cls:'kpi-gn'},
+  {k:'kpi_lastMonthSign',label:'截止上月\n签约额（万元）',     fn:()=>wan(totl('lastSign')),   cls:'kpi-or'},
+  {k:'kpi_lastMonthPromo',label:'截止上月\n宣传费支出',        fn:()=>wan(totl('lastPromo')),  cls:'kpi-bl'},
+  {k:'kpi_costRatio',    label:'截止上月\n签约费效比',          fn:()=>num(avg('costRatio')),   cls:'kpi-yw'},
+  {k:'kpi_convRate',     label:'截止上月\n渠道费效比',          fn:()=>num(avg('convRate')),    cls:'kpi-gn'},
+  {k:'kpi_signCompRate', label:'年度签约额\n目标完成率',        fn:()=>pct(avg('signCompRate')),cls:'kpi-or'},
+  {k:'kpi_promoExecRate',label:'年度宣传费\n执行率',           fn:()=>pct(avg('promoExecRate')),cls:'kpi-bl'},
+];
+function renderKPI(){
+  document.getElementById('kpiGrid').innerHTML=KPI_DEFS.map(it=>`
+    <div class="kpi-item ${it.cls}" onmouseenter="showKpiTip(event,'${it.k}')" onmouseleave="hideTip()">
+      <div class="kpi-hint">📖</div>
+      <div class="kpi-label">${it.label}</div>
+      <div class="kpi-val">${it.fn()}</div>
+    </div>`).join('');
+}
+
+/* =============================================
+   年度执行明细
+============================================= */
+const ANN_COLS=[
+  {k:'annPromo',     label:'年度宣传\n费预算',      fn:d=>num(d.annPromo)},
+  {k:'lastPromo',    label:'截止上月\n宣传费支出',  fn:d=>num(d.lastPromo)},
+  {k:'promoExecRate',label:'宣传费\n执行率',         fn:d=>pct(d.promoExecRate)},
+  {k:'convTrad',     label:'传统\n媒体',             fn:d=>num(d.convTrad)},
+  {k:'convNew',      label:'新媒\n体',               fn:d=>num(d.convNew)},
+  {k:'convVert',     label:'垂类\n媒体',             fn:d=>num(d.convVert)},
+  {k:'convOut',      label:'户外\n广告',             fn:d=>num(d.convOut)},
+  {k:'convPost',     label:'邮电\n广告',             fn:d=>num(d.convPost)},
+  {k:'convMat',      label:'宣传\n物料',             fn:d=>num(d.convMat)},
+  {k:'convEvt',      label:'活动\n营销',             fn:d=>num(d.convEvt)},
+];
+const ANN_AGG=[
+  ()=>num(totl('annPromo')),()=>num(totl('lastPromo')),()=>pct(avg('promoExecRate')),
+  ()=>num(avg('convTrad')),()=>num(avg('convNew')),()=>num(avg('convVert')),
+  ()=>num(avg('convOut')),()=>num(avg('convPost')),()=>num(avg('convMat')),()=>num(avg('convEvt')),
+];
+const ANN_TT=[
+  {k:'annSign',     l:'年度签约额预算',     f:d=>wan(d.annSign)},
+  {k:'annPromo',    l:'年度宣传费预算',      f:d=>wan(d.annPromo)},
+  {k:'lastSign',    l:'截止上月签约额',      f:d=>wan(d.lastSign)},
+  {k:'lastPromo',   l:'截止上月宣传费支出',  f:d=>wan(d.lastPromo)},
+  {k:'promoExecRate',l:'宣传费执行率',      f:d=>pct(d.promoExecRate)},
+  {k:'costRatio',   l:'签约费效比',           f:d=>num(d.costRatio)},
+  {k:'convRate',    l:'渠道费效比',           f:d=>num(d.convRate)},
+  {k:'convTrad',    l:'传统媒体',             f:d=>num(d.convTrad)},
+  {k:'convNew',     l:'新媒体',               f:d=>num(d.convNew)},
+  {k:'convVert',    l:'垂类媒体',             f:d=>num(d.convVert)},
+  {k:'convOut',     l:'户外广告',             f:d=>num(d.convOut)},
+  {k:'convPost',    l:'邮电广告',             f:d=>num(d.convPost)},
+  {k:'convMat',     l:'宣传物料',             f:d=>num(d.convMat)},
+  {k:'convEvt',     l:'活动营销',             f:d=>num(d.convEvt)},
+];
+// 年度明细排序状态：{key:'name'|列k, dir:'asc'|'desc'}
+let annSort={key:'name',dir:'asc'};
+function sortAnnual(key){
+  if(annSort.key===key) annSort.dir=annSort.dir==='asc'?'desc':'asc';
+  else {annSort.key=key;annSort.dir='asc';}
+  renderAnnual();
+}
+function renderAnnual(){
+  const t=document.getElementById('annualTbl');
+  // 表头
+  const thCols=ANN_COLS.map(c=>{
+    const isActive=annSort.key===c.k;
+    const icon=isActive?(annSort.dir==='asc'?'▲':'▼'):'⇅';
+    const cls='sortable'+(isActive?' sort-'+(annSort.dir==='asc'?'asc':'desc'):'');
+    return `<th class="${cls}" onclick="sortAnnual('${c.k}')">${c.label}<span class="sort-icon">${icon}</span></th>`;
+  }).join('');
+  const nameCls='sortable'+(annSort.key==='name'?' sort-'+(annSort.dir==='asc'?'asc':'desc'):'');
+  const nameIcon=annSort.key==='name'?(annSort.dir==='asc'?'▲':'▼'):'⇅';
+  t.querySelector('thead').innerHTML=`<tr><th class="${nameCls}" onclick="sortAnnual('name')">公司<span class="sort-icon">${nameIcon}</span></th>${thCols}</tr>`;
+  // 排序
+  let sorted=[...COMPANIES];
+  if(annSort.key==='name'){
+    sorted.sort((a,b)=>annSort.dir==='asc'?a.localeCompare(b,'zh-CN'):b.localeCompare(a,'zh-CN'));
+  } else {
+    const col=ANN_COLS.find(c=>c.k===annSort.key);
+    if(col) sorted.sort((a,b)=>{
+      const va=CD[a][annSort.key]??0, vb=CD[b][annSort.key]??0;
+      return annSort.dir==='asc'?va-vb:vb-va;
+    });
+  }
+  t.querySelector('tbody').innerHTML=sorted.map(c=>{
+    const d=CD[c];
+    return `<tr onmouseenter="showAnnTip(event,'${c}')" onmouseleave="hideTip()">`+
+      `<td title="${c}">${c}</td>`+ANN_COLS.map(col=>`<td>${col.fn(d)}</td>`).join('')+'</tr>';
+  }).join('');
+  t.querySelector('tfoot').innerHTML='<tr><td>合计</td>'+ANN_AGG.map(fn=>`<td>${fn()}</td>`).join('')+'</tr>';
+}
+
+/* =============================================
+   月度执行明细
+============================================= */
+const MON_COLS=[
+  {k:'mPromoBud',  label:'本月宣传\n费预算',   fn:d=>num(d.mPromoBud)},
+  {k:'mPromo',     label:'本月宣传\n费支出',    fn:d=>num(d.mPromo)},
+  {k:'mExecRate',  label:'宣传费\n执行率',       fn:d=>pct(d.mExecRate)},
+  {k:'mConvTrad',  label:'传统\n媒体',           fn:d=>num(d.mConvTrad)},
+  {k:'mConvNew',   label:'新媒\n体',             fn:d=>num(d.mConvNew)},
+  {k:'mConvVert',  label:'垂类\n媒体',          fn:d=>num(d.mConvVert)},
+  {k:'mConvOut',   label:'户外\n广告',           fn:d=>num(d.mConvOut)},
+  {k:'mConvPost',  label:'邮电\n广告',          fn:d=>num(d.mConvPost)},
+  {k:'mConvMat',   label:'宣传\n物料',           fn:d=>num(d.mConvMat)},
+  {k:'mConvEvt',   label:'活动\n营销',           fn:d=>num(d.mConvEvt)},
+];
+const MON_AGG=[
+  ()=>num(totl('mPromoBud')),()=>num(totl('mPromo')),()=>pct(avg('mExecRate')),
+  ()=>num(avg('mConvTrad')),()=>num(avg('mConvNew')),()=>num(avg('mConvVert')),
+  ()=>num(avg('mConvOut')),()=>num(avg('mConvPost')),()=>num(avg('mConvMat')),()=>num(avg('mConvEvt')),
+];
+const MON_TT=[
+  {k:'mSignBud',  l:'本月签约额预算', f:d=>wan(d.mSignBud)},
+  {k:'mPromoBud', l:'本月宣传费预算',  f:d=>wan(d.mPromoBud)},
+  {k:'mSign',     l:'本月签约额',      f:d=>wan(d.mSign)},
+  {k:'mPromo',    l:'本月宣传费支出',  f:d=>wan(d.mPromo)},
+  {k:'mExecRate', l:'宣传费执行率',    f:d=>pct(d.mExecRate)},
+  {k:'mCostRatio',l:'签约费效比',       f:d=>num(d.mCostRatio)},
+  {k:'mConvRate', l:'渠道费效比',       f:d=>num(d.mConvRate)},
+  {k:'mConvTrad', l:'传统媒体',         f:d=>num(d.mConvTrad)},
+  {k:'mConvNew',  l:'新媒体',           f:d=>num(d.mConvNew)},
+  {k:'mConvVert', l:'垂类媒体',         f:d=>num(d.mConvVert)},
+  {k:'mConvOut',  l:'户外广告',         f:d=>num(d.mConvOut)},
+  {k:'mConvPost', l:'邮电广告',         f:d=>num(d.mConvPost)},
+  {k:'mConvMat',  l:'宣传物料',         f:d=>num(d.mConvMat)},
+  {k:'mConvEvt',  l:'活动营销',         f:d=>num(d.mConvEvt)},
+];
+// 月度明细排序状态
+let monSort={key:'name',dir:'asc'};
+function sortMonthly(key){
+  if(monSort.key===key) monSort.dir=monSort.dir==='asc'?'desc':'asc';
+  else {monSort.key=key;monSort.dir='asc';}
+  renderMonthly();
+}
+function renderMonthly(){
+  const t=document.getElementById('monthlyTbl');
+  // 表头
+  const thCols=MON_COLS.map(c=>{
+    const isActive=monSort.key===c.k;
+    const icon=isActive?(monSort.dir==='asc'?'▲':'▼'):'⇅';
+    const cls='sortable'+(isActive?' sort-'+(monSort.dir==='asc'?'asc':'desc'):'');
+    return `<th class="${cls}" onclick="sortMonthly('${c.k}')">${c.label}<span class="sort-icon">${icon}</span></th>`;
+  }).join('');
+  const nameCls='sortable'+(monSort.key==='name'?' sort-'+(monSort.dir==='asc'?'asc':'desc'):'');
+  const nameIcon=monSort.key==='name'?(monSort.dir==='asc'?'▲':'▼'):'⇅';
+  t.querySelector('thead').innerHTML=`<tr><th class="${nameCls}" onclick="sortMonthly('name')">公司<span class="sort-icon">${nameIcon}</span></th>${thCols}</tr>`;
+  // 排序
+  let sorted=[...COMPANIES];
+  if(monSort.key==='name'){
+    sorted.sort((a,b)=>monSort.dir==='asc'?a.localeCompare(b,'zh-CN'):b.localeCompare(a,'zh-CN'));
+  } else {
+    const col=MON_COLS.find(c=>c.k===monSort.key);
+    if(col) sorted.sort((a,b)=>{
+      const va=CD[a][monSort.key]??0, vb=CD[b][monSort.key]??0;
+      return monSort.dir==='asc'?va-vb:vb-va;
+    });
+  }
+  t.querySelector('tbody').innerHTML=sorted.map(c=>{
+    const d=CD[c];
+    return `<tr onmouseenter="showMonTip(event,'${c}')" onmouseleave="hideTip()">`+
+      `<td title="${c}">${c}</td>`+MON_COLS.map(col=>`<td>${col.fn(d)}</td>`).join('')+'</tr>';
+  }).join('');
+  t.querySelector('tfoot').innerHTML='<tr><td>合计</td>'+MON_AGG.map(fn=>`<td>${fn()}</td>`).join('')+'</tr>';
+}
+
+/* =============================================
+   右侧统计表
+============================================= */
+const CH_MAP={
+  all:'convRate',
+  convTrad:'convTrad',convNew:'convNew',convVert:'convVert',
+  convOut:'convOut',convPost:'convPost',convMat:'convMat',convEvt:'convEvt'
+};
+const CH_LABEL={
+  all:'全部',convTrad:'传统媒体广告',convNew:'新媒体广告',convVert:'垂类媒体广告',
+  convOut:'户外广告',convPost:'邮电广告',convMat:'宣传物料',convEvt:'活动营销'
+};
+function renderBarList(id,dk,cc,ff,maxOv){
+  const el=document.getElementById(id);
+  const vals=COMPANIES.map(c=>({n:c,v:CD[c][dk]}));
+  const maxV=maxOv||Math.max(...vals.map(x=>x.v));
+  const avgV=(vals.reduce((s,x)=>s+x.v,0)/vals.length).toFixed(2);
+  el.innerHTML=`
+    <div class="stat-meta"><span class="stat-meta-label">40家平均</span><span class="stat-meta-val">${ff(parseFloat(avgV))}</span></div>
+    ${vals.sort((a,b)=>b.v-a.v).map(item=>{
+      const w=Math.min(100,item.v/maxV*100).toFixed(1);
+      return `<div class="bar-row" onmouseenter="showBarTip(event,'${item.n}')" onmouseleave="hideTip()">
+        <div class="bar-row-name" title="${item.n}">${item.n}</div>
+        <div class="bar-track"><div class="bar-fill ${cc}" style="width:${w}%"></div></div>
+        <div class="bar-val ${cc}">${ff(item.v)}</div>
+      </div>`;
+    }).join('')}`;
+}
+function renderConvRateChart(){
+  const chKey=document.getElementById('chSel').value;
+  const dk=CH_MAP[chKey];
+  const label=CH_LABEL[chKey];
+  renderBarList('barConvRate', dk, 'yw', v=>num(v));
+}
+function renderCharts(){
+  renderBarList('barExecRate', 'promoExecRate','',    v=>pct(v), 100);
+  renderBarList('barSignRate', 'signCompRate', 'bl',  v=>pct(v), 100);
+  renderBarList('barCostRatio','costRatio',    'gn',  v=>num(v));
+  renderConvRateChart();
+}
+
+/* =============================================
+   TOOLTIP
+============================================= */
+function showTip(e,html){
+  const tt=document.getElementById('tooltip');
+  tt.innerHTML=html;tt.classList.add('on');moveTip(e);
+}
+function moveTip(e){
+  const tt=document.getElementById('tooltip');
+  const W=window.innerWidth,H=window.innerHeight;
+  let x=e.clientX+14,y=e.clientY-10;
+  if(x+tt.offsetWidth>W-8)x=e.clientX-tt.offsetWidth-14;
+  if(y+tt.offsetHeight>H-8)y=H-tt.offsetHeight-8;
+  if(y<8)y=8;
+  tt.style.left=x+'px';tt.style.top=y+'px';
+}
+function hideTip(){document.getElementById('tooltip').classList.remove('on');}
+document.addEventListener('mousemove',e=>{
+  if(document.getElementById('tooltip').classList.contains('on'))moveTip(e);
+});
+
+// KPI悬浮（仅显示当前指标值）
+function showKpiTip(e,key){
+  const def=KPI_DEFS.find(d=>d.k===key);
+  if(!def)return;
+  showTip(e,`<div class="tooltip-title">${def.label.replace(/\n/g,'')}</div>
+    <div class="tooltip-row"><span class="tooltip-key">指标值</span><span class="tooltip-val">${def.fn()}</span></div>`);
+}
+// 年度表格悬浮
+function showAnnTip(e,c){
+  const d=CD[c];
+  showTip(e,`<div class="tooltip-title">${c}</div>
+    ${ANN_TT.map(f=>`<div class="tooltip-row"><span class="tooltip-key">${f.l}</span><span class="tooltip-val">${f.f(d)}</span></div>`).join('')}`);
+}
+// 月度表格悬浮
+function showMonTip(e,c){
+  const d=CD[c];
+  showTip(e,`<div class="tooltip-title">${c}</div>
+    ${MON_TT.map(f=>`<div class="tooltip-row"><span class="tooltip-key">${f.l}</span><span class="tooltip-val">${f.f(d)}</span></div>`).join('')}`);
+}
+// 图表悬浮（显示4项核心指标全称）
+function showBarTip(e,c){
+  const d=CD[c];
+  const chKey=document.getElementById('chSel')?document.getElementById('chSel').value:'all';
+  const curLabel=CH_LABEL[chKey];
+  const curVal=chKey==='all' ? d.convRate : d[chKey];
+  showTip(e,`<div class="tooltip-title">${c}</div>
+    <div class="tooltip-row"><span class="tooltip-key">企划宣传费预算执行率</span><span class="tooltip-val">${pct(d.promoExecRate)}</span></div>
+    <div class="tooltip-row"><span class="tooltip-key">签约目标完成率</span><span class="tooltip-val">${pct(d.signCompRate)}</span></div>
+    <div class="tooltip-row"><span class="tooltip-key">签约营销费效比</span><span class="tooltip-val">${num(d.costRatio)}</span></div>
+    <div class="tooltip-row"><span class="tooltip-key" style="color:var(--yw1)">${curLabel}费效比</span><span class="tooltip-val" style="color:var(--yw1)">${num(curVal)}</span></div>`);
+}
+
+/* =============================================
+   POPOVER (取数说明)
+============================================= */
+let curPopKey=null;
+function openQSM(key){
+  curPopKey=key;
+  const data=FMLS[key];
+  if(!data){closePop();return;}
+  document.getElementById('popTitle').textContent=data.title;
+  document.getElementById('popBody').innerHTML=data.fields.map((f,i)=>`
+    <div class="pop-item">
+      <span class="pop-num">${i+1}</span>
+      <div>
+        <div class="pop-label">${f.label}</div>
+        <div class="pop-desc">${f.desc}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('overlay').classList.add('on');
+}
+function closePop(){document.getElementById('overlay').classList.remove('on');curPopKey=null;}
+function closePopOnBg(e){if(e.target===document.getElementById('overlay'))closePop();}
+function exportPop(){
+  if(!curPopKey)return;
+  const data=FMLS[curPopKey];
+  dlJSON(data.fields.map((f,i)=>({序号:i+1,指标:f.label,取数说明:f.desc})),'取数说明_'+curPopKey);
+  toast('已导出','ok');
+}
+function exportAll(){
+  const all=[];
+  Object.keys(FMLS).forEach(sec=>{
+    FMLS[sec].fields.forEach((f,i)=>{
+      all.push({所属板块:FMLS[sec].title.split('·')[0].trim(),序号:i+1,指标:f.label,取数说明:f.desc});
+    });
+  });
+  dlJSON(all,'宣传企划品效_取数说明汇总_'+new Date().toISOString().slice(0,10));
+  toast('已导出'+all.length+'条取数说明','ok');
+}
+function dlJSON(data,name){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download=name+'.json';a.click();
+}
+function toast(msg,cls){
+  const el=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  el.className='toast on'+(cls?' '+cls:'');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2500);
+}
+
+/* =============================================
+   时钟
+============================================= */
+function tick(){
+  const n=new Date(),p=v=>String(v).padStart(2,'0');
+  document.getElementById('hdTime').textContent='统计数据截止：'+n.getFullYear()+'-'+p(n.getMonth()+1)+'-'+p(n.getDate());
+}
+
+/* =============================================
+   事件
+============================================= */
+document.getElementById('yrSel').addEventListener('change',()=>{
+  toast('年份已切换，数据刷新中…');renderKPI();renderAnnual();renderMonthly();renderCharts();
+});
+document.getElementById('moSel').addEventListener('change',()=>{
+  const m=document.getElementById('moSel').value;
+  toast(m?'已切换至'+m+'月数据':'已显示全部月份');renderMonthly();
+});
+document.getElementById('chSel').addEventListener('change',()=>{
+  const ch=document.getElementById('chSel').value;
+  toast('已切换至：'+CH_LABEL[ch]+' 费效比');renderConvRateChart();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePop()});
+
+/* =============================================
+   Init
+============================================= */
+renderKPI();renderAnnual();renderMonthly();renderCharts();tick();
+setInterval(tick,60000);
+</script>
+</body>
+</html>
