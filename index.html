@@ -492,13 +492,13 @@ COMPANIES.forEach((c,i)=>{
     convRate:sr(seed+4,0.8,4.5),signCompRate:parseFloat((lastSign/annSign*100).toFixed(1)),
     promoExecRate:parseFloat((lastPromo/annPromo*100).toFixed(1)),
     convTrad:sr(seed+5,0.6,3.8),convNew:sr(seed+6,0.8,5.0),convVert:sr(seed+7,0.5,3.5),
-    convOut:sr(seed+8,0.4,3.0),convPost:sr(seed+9,0.3,2.5),convMat:sr(seed+10,0.5,3.2),convEvt:sr(seed+11,1.0,6.0),
+    convOut:sr(seed+8,0.4,3.0),convPost:sr(seed+9,0.3,2.5),convDes:sr(seed+26,0.4,2.8),convMat:sr(seed+10,0.5,3.2),convEvt:sr(seed+11,1.0,6.0),
     mSign:sr(seed+12,annSign*0.04,annSign*0.12),mSignBud:sr(seed+13,annSign*0.06,annSign*0.14),
     mPromo:sr(seed+14,annPromo*0.04,annPromo*0.12),mPromoBud:sr(seed+15,annPromo*0.06,annPromo*0.14),
     mCostRatio:sr(seed+16,5,18),mConvRate:sr(seed+17,0.5,4.0),
     mExecRate:parseFloat((sr(seed+18,0.15,1.1,3)*100).toFixed(1)),
     mConvTrad:sr(seed+19,0.4,3.2),mConvNew:sr(seed+20,0.6,4.5),mConvVert:sr(seed+21,0.4,3.0),
-    mConvOut:sr(seed+22,0.3,2.8),mConvPost:sr(seed+23,0.2,2.2),mConvMat:sr(seed+24,0.4,3.0),mConvEvt:sr(seed+25,0.8,5.5),
+    mConvOut:sr(seed+22,0.3,2.8),mConvPost:sr(seed+23,0.2,2.2),mConvDes:sr(seed+27,0.3,2.6),mConvMat:sr(seed+24,0.4,3.0),mConvEvt:sr(seed+25,0.8,5.5),
   };
 });
 const totl=k=>COMPANIES.reduce((s,c)=>s+(CD[c][k]||0),0);
