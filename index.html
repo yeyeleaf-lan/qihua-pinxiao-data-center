@@ -334,7 +334,7 @@ html,body{
 
     <div class="card stat-card">
       <div class="card-hd">
-        <div class="card-hd-left"><div class="card-hd-title">年度签约目标完成率</div></div>
+        <div class="card-hd-left"><div class="card-hd-title">年度企划宣传签约目标完成率</div></div>
         <div class="card-hd-right">
           <span class="qsm-btn" onclick="openQSM('chartSignRate')"><span class="qsm-num">1</span>取数说明</span>
         </div>
@@ -344,7 +344,7 @@ html,body{
 
     <div class="card stat-card">
       <div class="card-hd">
-        <div class="card-hd-left"><div class="card-hd-title">年度签约营销费效比</div></div>
+        <div class="card-hd-left"><div class="card-hd-title">年度企划宣传签约费效比</div></div>
         <div class="card-hd-right">
           <span class="qsm-btn" onclick="openQSM('chartCostRatio')"><span class="qsm-num">1</span>取数说明</span>
         </div>
@@ -410,7 +410,7 @@ const FMLS={
     fields:[
       {k:'kpi_annualSign',   label:'年度签约额预算（万元）', desc:'各公司年度签约额预算总计。取各公司经营周报预算汇总功能中【新增签约金额-年度预算数】合计。'},
       {k:'kpi_annualPromo',  label:'年度企划宣传费预算（万元）', desc:'各公司总计。获取数仓中，预算表内【企划宣传费】所有类别的对应年度预算额总和。'},
-      {k:'kpi_targetRatio',   label:'年度计划企划宣传签约费效比', desc:'年度签约额预算 / 年度企划宣传费预算。'},
+      {k:'kpi_targetRatio',   label:'年度企划宣传签约费效比', desc:'年度签约额预算 / 年度企划宣传费预算。'},
       {k:'kpi_lastMonthSign', label:'截止上月签约额（万元）', desc:'各公司总计。获取经营周报汇总功能下，在最新周期周报上【新增签约金额-截止上月完成情况系统取值】的汇总。'},
       {k:'kpi_lastMonthPromo',label:'截止上月企划宣传费支出额', desc:'各公司总计。获取数仓中，支出明细表内【企划宣传费】所有类别的本年内截止上个月底的费用报销单金额之和。'},
       {k:'kpi_costRatio',     label:'截止上月企划宣传签约费效比', desc:'截止上月企划宣传费支出 / 截止上月签约总额。'},
@@ -511,10 +511,10 @@ const num =(v,d=2)=>v.toLocaleString('zh-CN',{maximumFractionDigits:d});
 const KPI_DEFS=[
   {k:'kpi_annualSign',   label:'年度签约额\n预算（万元）',   fn:()=>wan(totl('annSign')),     cls:'kpi-or'},
   {k:'kpi_annualPromo',  label:'年度宣传费\n预算（万元）',    fn:()=>wan(totl('annPromo')),    cls:'kpi-bl'},
-  {k:'kpi_targetRatio',   label:'年度计划\n签约费效比',         fn:()=>num(avg('targetRatio')), cls:'kpi-gn'},
+  {k:'kpi_targetRatio',   label:'年度企划宣传\n签约费效比',         fn:()=>num(avg('targetRatio')), cls:'kpi-gn'},
   {k:'kpi_lastMonthSign',label:'截止上月\n签约额（万元）',     fn:()=>wan(totl('lastSign')),   cls:'kpi-or'},
   {k:'kpi_lastMonthPromo',label:'截止上月\n宣传费支出',        fn:()=>wan(totl('lastPromo')),  cls:'kpi-bl'},
-  {k:'kpi_costRatio',    label:'截止上月\n签约费效比',          fn:()=>num(avg('costRatio')),   cls:'kpi-yw'},
+  {k:'kpi_costRatio',    label:'截止上月企划宣传\n签约费效比',          fn:()=>num(avg('costRatio')),   cls:'kpi-yw'},
   {k:'kpi_convRate',     label:'截止上月\n渠道费效比',          fn:()=>num(avg('convRate')),    cls:'kpi-gn'},
   {k:'kpi_signCompRate', label:'年度签约额\n目标完成率',        fn:()=>pct(avg('signCompRate')),cls:'kpi-or'},
   {k:'kpi_promoExecRate',label:'年度宣传费\n执行率',           fn:()=>pct(avg('promoExecRate')),cls:'kpi-bl'},
@@ -761,8 +761,8 @@ function showBarTip(e,c){
   const curVal=chKey==='all' ? d.convRate : d[chKey];
   showTip(e,`<div class="tooltip-title">${c}</div>
     <div class="tooltip-row"><span class="tooltip-key">企划宣传费预算执行率</span><span class="tooltip-val">${pct(d.promoExecRate)}</span></div>
-    <div class="tooltip-row"><span class="tooltip-key">签约目标完成率</span><span class="tooltip-val">${pct(d.signCompRate)}</span></div>
-    <div class="tooltip-row"><span class="tooltip-key">签约营销费效比</span><span class="tooltip-val">${num(d.costRatio)}</span></div>
+    <div class="tooltip-row"><span class="tooltip-key">企划宣传签约目标完成率</span><span class="tooltip-val">${pct(d.signCompRate)}</span></div>
+    <div class="tooltip-row"><span class="tooltip-key">企划宣传签约费效比</span><span class="tooltip-val">${num(d.costRatio)}</span></div>
     <div class="tooltip-row"><span class="tooltip-key" style="color:var(--yw1)">${curLabel}费效比</span><span class="tooltip-val" style="color:var(--yw1)">${num(curVal)}</span></div>`);
 }
 
