@@ -420,7 +420,7 @@ const FMLS={
     ]
   },
   annual:{
-    title:'年度执行明细 · 取数说明（共10项）',
+    title:'年度执行明细 · 取数说明（共11项）',
     fields:[
       {k:'a_annualBudgetPromo',label:'年度宣传费预算（万元）', desc:'获取数仓中，预算表内【企划宣传费】8个类别的对应年度预算额总和（传统媒体广告、新媒体广告、垂类媒体广告、邮电广告、户外广告、活动营销、品宣设计、宣传物料）。'},
       {k:'a_lastPromo',        label:'截止上月宣传费支出额（万元）', desc:'获取数仓中，支出明细表内【企划宣传费】8个类别的本年内截止上个月底的费用报销单金额之和（传统媒体广告、新媒体广告、垂类媒体广告、邮电广告、户外广告、活动营销、品宣设计、宣传物料）。'},
@@ -430,12 +430,13 @@ const FMLS={
       {k:'a_convVert',        label:'垂类媒体广告', desc:'截止上月宣传费-垂类媒体广告支出额。'},
       {k:'a_convOut',         label:'户外广告', desc:'截止上月宣传费-户外广告支出额。'},
       {k:'a_convPost',        label:'邮电广告', desc:'截止上月宣传费-邮电广告支出额。'},
+      {k:'a_convDes',         label:'品宣设计', desc:'截止上月宣传费-品宣设计支出额。'},
       {k:'a_convMat',         label:'宣传物料', desc:'截止上月宣传费-宣传物料支出额。'},
       {k:'a_convEvt',         label:'活动营销', desc:'截止上月宣传费-活动营销支出额。'},
     ]
   },
   monthly:{
-    title:'月度执行明细 · 取数说明（共10项）',
+    title:'月度执行明细 · 取数说明（共11项）',
     fields:[
       {k:'m_budgetPromo',  label:'本月宣传费预算（万元）', desc:'获取数仓中，预算表内【企划宣传费】8个类别的对应系统所选月份的预算额总和。'},
       {k:'m_promo',         label:'本月宣传费支出额（万元）', desc:'获取数仓中，支出明细表内【企划宣传费】8个类别的本年内截止上个月底的费用报销单金额之和。'},
@@ -445,6 +446,7 @@ const FMLS={
       {k:'m_convVert',      label:'垂类媒体广告', desc:'本月宣传费-垂类媒体广告支出额。'},
       {k:'m_convOut',       label:'户外广告', desc:'本月宣传费-户外广告支出额。'},
       {k:'m_convPost',      label:'邮电广告', desc:'本月宣传费-邮电广告支出额。'},
+      {k:'m_convDes',       label:'品宣设计', desc:'本月宣传费-品宣设计支出额。'},
       {k:'m_convMat',       label:'宣传物料', desc:'本月宣传费-宣传物料支出额。'},
       {k:'m_convEvt',       label:'活动营销', desc:'本月宣传费-活动营销支出额。'},
     ]
@@ -540,13 +542,15 @@ const ANN_COLS=[
   {k:'convVert',     label:'垂类\n媒体',             fn:d=>num(d.convVert)},
   {k:'convOut',      label:'户外\n广告',             fn:d=>num(d.convOut)},
   {k:'convPost',     label:'邮电\n广告',             fn:d=>num(d.convPost)},
+  {k:'convDes',      label:'品宣\n设计',             fn:d=>num(d.convDes)},
   {k:'convMat',      label:'宣传\n物料',             fn:d=>num(d.convMat)},
   {k:'convEvt',      label:'活动\n营销',             fn:d=>num(d.convEvt)},
 ];
 const ANN_AGG=[
   ()=>num(totl('annPromo')),()=>num(totl('lastPromo')),()=>pct(avg('promoExecRate')),
   ()=>num(avg('convTrad')),()=>num(avg('convNew')),()=>num(avg('convVert')),
-  ()=>num(avg('convOut')),()=>num(avg('convPost')),()=>num(avg('convMat')),()=>num(avg('convEvt')),
+  ()=>num(avg('convOut')),()=>num(avg('convPost')),()=>num(avg('convDes')),
+  ()=>num(avg('convMat')),()=>num(avg('convEvt')),
 ];
 const ANN_TT=[
   {k:'annSign',     l:'年度签约额预算',     f:d=>wan(d.annSign)},
@@ -559,6 +563,7 @@ const ANN_TT=[
   {k:'convVert',    l:'垂类媒体',             f:d=>num(d.convVert)},
   {k:'convOut',     l:'户外广告',             f:d=>num(d.convOut)},
   {k:'convPost',    l:'邮电广告',             f:d=>num(d.convPost)},
+  {k:'convDes',     l:'品宣设计',             f:d=>num(d.convDes)},
   {k:'convMat',     l:'宣传物料',             f:d=>num(d.convMat)},
   {k:'convEvt',     l:'活动营销',             f:d=>num(d.convEvt)},
 ];
@@ -612,13 +617,15 @@ const MON_COLS=[
   {k:'mConvVert',  label:'垂类\n媒体',          fn:d=>num(d.mConvVert)},
   {k:'mConvOut',   label:'户外\n广告',           fn:d=>num(d.mConvOut)},
   {k:'mConvPost',  label:'邮电\n广告',          fn:d=>num(d.mConvPost)},
+  {k:'mConvDes',   label:'品宣\n设计',           fn:d=>num(d.mConvDes)},
   {k:'mConvMat',   label:'宣传\n物料',           fn:d=>num(d.mConvMat)},
   {k:'mConvEvt',   label:'活动\n营销',           fn:d=>num(d.mConvEvt)},
 ];
 const MON_AGG=[
   ()=>num(totl('mPromoBud')),()=>num(totl('mPromo')),()=>pct(avg('mExecRate')),
   ()=>num(avg('mConvTrad')),()=>num(avg('mConvNew')),()=>num(avg('mConvVert')),
-  ()=>num(avg('mConvOut')),()=>num(avg('mConvPost')),()=>num(avg('mConvMat')),()=>num(avg('mConvEvt')),
+  ()=>num(avg('mConvOut')),()=>num(avg('mConvPost')),()=>num(avg('mConvDes')),
+  ()=>num(avg('mConvMat')),()=>num(avg('mConvEvt')),
 ];
 const MON_TT=[
   {k:'mSignBud',  l:'本月签约额预算', f:d=>wan(d.mSignBud)},
@@ -631,6 +638,7 @@ const MON_TT=[
   {k:'mConvVert', l:'垂类媒体',         f:d=>num(d.mConvVert)},
   {k:'mConvOut',  l:'户外广告',         f:d=>num(d.mConvOut)},
   {k:'mConvPost', l:'邮电广告',         f:d=>num(d.mConvPost)},
+  {k:'mConvDes',  l:'品宣设计',          f:d=>num(d.mConvDes)},
   {k:'mConvMat',  l:'宣传物料',         f:d=>num(d.mConvMat)},
   {k:'mConvEvt',  l:'活动营销',         f:d=>num(d.mConvEvt)},
 ];
